@@ -1,9 +1,10 @@
-const windowDOM = document.getElementById('window')!;
+const windowDOM = document.getElementById('window') as HTMLElement;
 
 //using a union type to make currentValue a number or string
 let currentValue: number | string = 0;
 let previousValue = 0;
 let currentOperator = "none";
+
 windowDOM.innerHTML = currentValue.toString();
 
 //Helper Function
