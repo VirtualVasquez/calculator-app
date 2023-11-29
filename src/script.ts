@@ -26,11 +26,9 @@ type DigitTuple = [Digit, ...Digit[]] & { length: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 
 
 let currentInputs: DigitTuple = [Digit.Zero]; 
 let previousInputs: DigitTuple = [Digit.Zero]; 
-let currentOperator: Operator.None;
+let currentOperator =  Operator.None;
 
-console.log(currentInputs);
-
-// windowDOM.innerHTML = currentInputs.toString();
+windowDOM.innerHTML = currentInputs.join("");
 
 // //Helper Function
 // function solveIt(operator: string){
@@ -62,87 +60,93 @@ console.log(currentInputs);
 // }
 
 
-// window.addEventListener('click', function(event){
+window.addEventListener('click', function(event){
+    event.preventDefault() //prevent window from reloading on button press
 
-//     //using type asserction to inform `event.target` as `Element` to then use appropriate methods.
-//     const targetElement = event.target as Element;
-//     const targetValue = targetElement.getAttribute('value');
+    //using type assertion to inform `event.target` as `Element` to then use appropriate methods.
+    const targetElement = event.target as Element;
+    const targetValue = targetElement.getAttribute('value');
     
-//     if (targetValue !== null) {
-//         //IF reset button pressed
-//         if(targetValue === "clear"){
-//             currentInputs = 0;
-//             previousInputs  = 0;
-//             currentOperator = "none";
-//         }
-//         //IF a number is pressed
-//         if(targetElement.matches('.number')){
-//             //IF writing first value
-            
-//             if(currentOperator == "none" && typeof currentInputs == "number"){
+    if (targetValue == null){
+        return;
+    }
+    
+    //IF reset button pressed
+    if(targetValue === "clear"){
+        currentInputs = [Digit.Zero];
+        previousInputs  = [Digit.Zero];
+        currentOperator = Operator.None;
+    }
 
-//                 //Display no more than 10 digits on the screen
-//                 if(currentInputs < 1000000000){
-//                     //IF value is zero, Prevent Leading Zeroes
-//                     if(currentInputs === 0){
-//                         currentInputs = targetValue;
-//                     }
-//                     else{
-//                         console.log("this is the type of targetvalue" + typeof targetValue)
-//                     }
-//                     //ELSE concat the number
-//                     // else(typeof currentInputs === "string" && currentInputs != "Error"){
-//                     //     currentInputs = currentInputs.concat(targetValue.toString());
-//                     // }
-//                 }
-//             }
-//             //IF an operator has been selected
-//             if(currentOperator !== "none"){
-//                 //IF first digit of new value, save initial value, then display new value
-//                 if(previousInputs == 0 && typeof currentInputs == "string" && currentInputs != "Error"){
-//                     previousInputs = parseInt(currentInputs);
-//                     currentInputs = targetValue.toString();
-//                 }
-//                 //ELSE concat digit to new value
-//                 if(typeof currentInputs === "string" && currentInputs != "Error"){
-//                     currentInputs = currentInputs.concat(targetValue.toString());
-//                 }
-//             }
-    
-//         }
-        // //IF the decimal is pressed
-        // if(targetElement.matches('#decimal')){
-        //     //prevent additional decimals
-        //     if(typeof currentInputs == "string" && !currentInputs.includes(".")){
+    //IF a number is pressed
+    if(targetElement.matches('.number')){
+
+        const digitValues = Object.values(Digit) as Digit[];
+        const digitValue = targetValue as Digit;
+
+        //IF writing first value            
+        if(currentOperator == Operator.None){            
+            //Prevent Leading Zeroes
+
+            //prevent more than one decimal
+            if(targetValue == Digit.Decimal && currentInputs.includes(Digit.Decimal)){
+                return;
+            }
+            if(digitValues.includes(digitValue) && currentInputs.length < 9){
+                if(currentInputs.length === 1 && currentInputs[0] === Digit.Zero && digitValue != Digit.Zero){
+                    currentInputs[0] = digitValue;
+                }
+                else{
+                    currentInputs.push(digitValue);
+                }
+            } 
+        }
+        //IF an operator has been selected
+        // if(currentOperator !== "none"){
+        //     //IF first digit of new value, save initial value, then display new value
+        //     if(previousInputs == 0 && typeof currentInputs == "string" && currentInputs != "Error"){
+        //         previousInputs = parseInt(currentInputs);
+        //         currentInputs = targetValue.toString();
+        //     }
+        //     //ELSE concat digit to new value
+        //     if(typeof currentInputs === "string" && currentInputs != "Error"){
         //         currentInputs = currentInputs.concat(targetValue.toString());
         //     }
         // }
-        // //IF operator selected
-        // if(targetElement.matches('.operator')){
-        //     //IF FIRST TIME USING OPERATOR
-        //     if(currentOperator === "none"){
-        //         currentOperator = targetValue //define operation
-        //         return event.preventDefault() //prevent next step due to defined operation
-        //     }
-        //     //IF NOT FIRST TIME USING OPERATOR
-        //     if(currentOperator !== "none"){
-        //         solveIt(currentOperator) //execute previous operator
-        //         currentOperator = targetValue //queue operator for next calculation
-        //     }
-    
-        // }
-        // //IF solve button pressed 
-        // if(targetElement.matches('#equals')){
-        //     solveIt(currentOperator);
-        // }
+
+    }
+    // //IF the decimal is pressed
+    // if(targetElement.matches('#decimal')){
+    //     //prevent additional decimals
+    //     if(typeof currentInputs == "string" && !currentInputs.includes(".")){
+    //         currentInputs = currentInputs.concat(targetValue.toString());
+    //     }
+    // }
+    // //IF operator selected
+    // if(targetElement.matches('.operator')){
+    //     //IF FIRST TIME USING OPERATOR
+    //     if(currentOperator === "none"){
+    //         currentOperator = targetValue //define operation
+    //         return event.preventDefault() //prevent next step due to defined operation
+    //     }
+    //     //IF NOT FIRST TIME USING OPERATOR
+    //     if(currentOperator !== "none"){
+    //         solveIt(currentOperator) //execute previous operator
+    //         currentOperator = targetValue //queue operator for next calculation
+    //     }
+
+    // }
+    // //IF solve button pressed 
+    // if(targetElement.matches('#equals')){
+    //     solveIt(currentOperator);
     // }
 
 
 
     // event.preventDefault() //prevent window from reloading on button press
-    // windowDOM.innerHTML = currentInputs.toString(); //write to DOM value/calculation
+    windowDOM.innerHTML = currentInputs.join(""); //write to DOM value/calculation
 
-// })
+})
 
 
 
