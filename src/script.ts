@@ -38,6 +38,8 @@ function solveIt(operator: string){
 
 
 window.addEventListener('click', function(event){
+    console.log("test");
+
 
     //using type asserction to inform `event.target` as `Element` to then use appropriate methods.
     const targetElement = event.target as Element;

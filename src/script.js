@@ -32,6 +32,7 @@ function solveIt(operator) {
     }
 }
 window.addEventListener('click', function (event) {
+    console.log("test");
     //using type asserction to inform `event.target` as `Element` to then use appropriate methods.
     const targetElement = event.target;
     const targetValue = targetElement.getAttribute('value');
