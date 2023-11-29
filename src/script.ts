@@ -1,34 +1,38 @@
 const windowDOM = document.getElementById('window');
-let currentValue = "0";
-let previousValue = "0";
+
+//using a union type to make currentValue a number or string
+let currentValue: number | string = 0;
+let previousValue = 0;
 let currentOperator = "none";
-windowDOM.innerHTML = currentValue;
+windowDOM.innerHTML = currentValue.toString();
 
 //Helper Function
 function solveIt(operator){
 
-    if (operator === "divide"){
-        currentValue = parseInt(previousValue) / parseInt(currentValue);
-    }
-    if (operator === "multiply"){
-        currentValue = parseInt(previousValue) * parseInt(currentValue)
-    }
-    if (operator === "subtract"){
-        currentValue = parseInt(previousValue) - parseInt(currentValue)
-    }
-    if (operator === "add"){
-        currentValue = parseInt(previousValue) + parseInt(currentValue)
+    if(typeof currentValue === "number"){
+        if (operator === "divide"){
+            currentValue = previousValue / currentValue;
+        }
+        if (operator === "multiply"){
+            currentValue = previousValue * currentValue
+        }
+        if (operator === "subtract"){
+            currentValue = previousValue - currentValue
+        }
+        if (operator === "add"){
+            currentValue = previousValue + currentValue
+        }
+        //display decimals to the thousandth(0.001)
+        currentValue = Math.round(currentValue * 1000) / 1000
+        //if number too big or too small to display, show ERROR
+        if(currentValue > 9999999999 || currentValue < 0.00000001){
+            currentValue="ERROR";
+        }
+        //reset values to proceed with more calculations
+        currentOperator="none";
+        previousValue=0;
     }
 
-    //display decimals to the thousandth(0.001)
-    currentValue = Math.round(currentValue * 1000) / 1000
-    //if number too big or too small to display, show ERROR
-    if(currentValue > 9999999999 || currentValue < 0.00000001){
-        currentValue="ERROR";
-    }
-    //reset values to proceed with more calculations
-    currentOperator="none";
-    previousValue="0";
 }
 
 
