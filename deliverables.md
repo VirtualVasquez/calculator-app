@@ -1,7 +1,7 @@
 1. Type Annotations:
 
-- Add type annotations to variables and function parameters.
-- Ensure functions have clear return type declarations.
+- ~~Add type annotations to variables and function parameters.~~
+- ~~Ensure functions have clear return type declarations.~~
 
 2. Interfaces and Type Declarations:
 
@@ -13,7 +13,7 @@
  - Explore and apply advanced TypeScript features (e.g., mapped types, conditional types) where applicable.
 
 4. Union and Intersection Types:
- - Use union types where multiple types are possible.
+ - ~~Use union types where multiple types are possible.~~
  - Utilize intersection types when combining different types.
 
 5. Function Overloading and Signatures:
@@ -31,21 +31,21 @@
 
 8. Refactoring JavaScript to TypeScript:
 
- - Convert existing JavaScript files to TypeScript.
+ - ~~Convert existing JavaScript files to TypeScript.~~
  - Resolve compilation errors during conversion.
 
 9. Error Handling and Debugging:
 
-- Handle type-related errors effectively.
+- ~~Handle type-related errors effectively.~~
 - Debug and troubleshoot TypeScript-specific issues.
 
 10. IDE/Editor Integration:
 
- - Configure your IDE/editor to maximize TypeScript features (e.g., autocompletion, type checking).
+ - ~~Configure your IDE/editor to maximize TypeScript features (e.g., autocompletion, type checking).~~
 
 11. Documentation and Comments:
 
- - Add clear comments and type annotations within the codebase.
+ - ~~Add clear comments and type annotations within the codebase.~~
 
 12. Testing with TypeScript:
 
