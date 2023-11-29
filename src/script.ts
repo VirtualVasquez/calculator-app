@@ -1,4 +1,4 @@
-const windowDOM = document.getElementById('window');
+const windowDOM = document.getElementById('window')!;
 
 //using a union type to make currentValue a number or string
 let currentValue: number | string = 0;
@@ -7,7 +7,7 @@ let currentOperator = "none";
 windowDOM.innerHTML = currentValue.toString();
 
 //Helper Function
-function solveIt(operator){
+function solveIt(operator: string){
 
     if(typeof currentValue === "number"){
         if (operator === "divide"){
@@ -40,68 +40,73 @@ window.addEventListener('click', function(event){
 
     //using type asserction to inform `event.target` as `Element` to then use appropriate methods.
     const targetElement = event.target as Element;
-
-    //IF reset button pressed
-    if(targetElement.matches('#clear')){
-        currentValue = 0;
-        previousValue  = 0;
-        currentOperator = "none";
-    }
-    //IF a number is pressed
-    if(targetElement.matches('.number')){
-        //IF writing first value
-        if(currentOperator == "none" && previousValue == 0 && typeof currentValue == "number"){
-            //Display no more than 10 digits on the screen
-            if(currentValue < 1000000000){
-                //IF value is zero, Prevent Leading Zeroes
-                if(currentValue === 0){
-                    currentValue = targetElement.getAttribute('value').toString();
-                } 
-                //ELSE concat the number
-                if(typeof currentValue === "string" && currentValue != "Error"){
-                    currentValue = currentValue.concat(targetElement.getAttribute('value').toString());
+    const targetValue = targetElement.getAttribute('value');
+    
+    if (targetValue !== null) {
+        //IF reset button pressed
+        if(targetElement.matches('#clear')){
+            currentValue = 0;
+            previousValue  = 0;
+            currentOperator = "none";
+        }
+        //IF a number is pressed
+        if(targetElement.matches('.number')){
+            //IF writing first value
+            if(currentOperator == "none" && previousValue == 0 && typeof currentValue == "number"){
+                //Display no more than 10 digits on the screen
+                if(currentValue < 1000000000){
+                    //IF value is zero, Prevent Leading Zeroes
+                    if(currentValue === 0){
+                        currentValue = targetValue.toString();
+                    } 
+                    //ELSE concat the number
+                    if(typeof currentValue === "string" && currentValue != "Error"){
+                        currentValue = currentValue.concat(targetValue.toString());
+                    }
                 }
             }
-        }
-        //IF an operator has been selected
-        if(currentOperator !== "none"){
-            //IF first digit of new value, save initial value, then display new value
-            if(previousValue == 0 && typeof currentValue == "string" && currentValue != "Error"){
-                previousValue = parseInt(currentValue);
-                currentValue = targetElement.getAttribute('value').toString();
+            //IF an operator has been selected
+            if(currentOperator !== "none"){
+                //IF first digit of new value, save initial value, then display new value
+                if(previousValue == 0 && typeof currentValue == "string" && currentValue != "Error"){
+                    previousValue = parseInt(currentValue);
+                    currentValue = targetValue.toString();
+                }
+                //ELSE concat digit to new value
+                if(typeof currentValue === "string" && currentValue != "Error"){
+                    currentValue = currentValue.concat(targetValue.toString());
+                }
             }
-            //ELSE concat digit to new value
-            if(typeof currentValue === "string" && currentValue != "Error"){
-                currentValue = currentValue.concat(targetElement.getAttribute('value').toString());
+    
+        }
+        //IF the decimal is pressed
+        if(targetElement.matches('#decimal')){
+            //prevent additional decimals
+            if(typeof currentValue == "string" && !currentValue.includes(".")){
+                currentValue = currentValue.concat(targetValue.toString());
             }
         }
+        //IF operator selected
+        if(targetElement.matches('.operator')){
+            //IF FIRST TIME USING OPERATOR
+            if(currentOperator === "none"){
+                currentOperator = targetValue //define operation
+                return event.preventDefault() //prevent next step due to defined operation
+            }
+            //IF NOT FIRST TIME USING OPERATOR
+            if(currentOperator !== "none"){
+                solveIt(currentOperator) //execute previous operator
+                currentOperator = targetValue //queue operator for next calculation
+            }
+    
+        }
+        //IF solve button pressed 
+        if(targetElement.matches('#equals')){
+            solveIt(currentOperator);
+        }
+    }
 
-    }
-    //IF the decimal is pressed
-    if(targetElement.matches('#decimal')){
-        //prevent additional decimals
-        if(typeof currentValue == "string" && !currentValue.includes(".")){
-            currentValue = currentValue.concat(targetElement.getAttribute('value').toString());
-        }
-    }
-    //IF operator selected
-    if(targetElement.matches('.operator')){
-        //IF FIRST TIME USING OPERATOR
-        if(currentOperator === "none"){
-            currentOperator = targetElement.getAttribute('value') //define operation
-            return event.preventDefault() //prevent next step due to defined operation
-        }
-        //IF NOT FIRST TIME USING OPERATOR
-        if(currentOperator !== "none"){
-            solveIt(currentOperator) //execute previous operator
-            currentOperator = targetElement.getAttribute('value'); //queue operator for next calculation
-        }
 
-    }
-    //IF solve button pressed 
-    if(targetElement.matches('#equals')){
-        solveIt(currentOperator);
-    }
 
     event.preventDefault() //prevent window from reloading on button press
     windowDOM.innerHTML = currentValue.toString(); //write to DOM value/calculation

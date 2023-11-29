@@ -22,7 +22,7 @@
 
 6. Strict Mode and Compiler Options:
 
- - Enable TypeScript's strict mode and set appropriate compiler options to catch errors early.
+ - ~~Enable TypeScript's strict mode and set appropriate compiler options to catch errors early.~~
 
 7. Module Systems and Typings:
 
