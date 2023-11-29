@@ -22,34 +22,34 @@ var Operator;
     Operator["Divide"] = "divide";
     Operator["None"] = "none";
 })(Operator || (Operator = {}));
-let currentInputs = [Digit.Zero];
-let previousInputs = [Digit.Zero];
+let firstArgument = [Digit.Zero];
+let secondArgument = [Digit.Zero];
 let currentOperator = Operator.None;
-windowDOM.innerHTML = currentInputs.join("");
+windowDOM.innerHTML = firstArgument.join("");
 // //Helper Function
 // function solveIt(operator: string){
-//     if(typeof currentInputs === "number"){
+//     if(typeof firstArgument === "number"){
 //         if (operator === "divide"){
-//             currentInputs = previousInputs / currentInputs;
+//             firstArgument = secondArgument / firstArgument;
 //         }
 //         if (operator === "multiply"){
-//             currentInputs = previousInputs * currentInputs
+//             firstArgument = secondArgument * firstArgument
 //         }
 //         if (operator === "subtract"){
-//             currentInputs = previousInputs - currentInputs
+//             firstArgument = secondArgument - firstArgument
 //         }
 //         if (operator === "add"){
-//             currentInputs = previousInputs + currentInputs
+//             firstArgument = secondArgument + firstArgument
 //         }
 //         //display decimals to the thousandth(0.001)
-//         currentInputs = Math.round(currentInputs * 1000) / 1000
+//         firstArgument = Math.round(firstArgument * 1000) / 1000
 //         //if number too big or too small to display, show ERROR
-//         if(currentInputs > 9999999999 || currentInputs < 0.00000001){
-//             currentInputs="ERROR";
+//         if(firstArgument > 9999999999 || firstArgument < 0.00000001){
+//             firstArgument="ERROR";
 //         }
 //         //reset values to proceed with more calculations
 //         currentOperator="none";
-//         previousInputs=0;
+//         secondArgument=0;
 //     }
 // }
 window.addEventListener('click', function (event) {
@@ -62,8 +62,8 @@ window.addEventListener('click', function (event) {
     }
     //IF reset button pressed
     if (targetValue === "clear") {
-        currentInputs = [Digit.Zero];
-        previousInputs = [Digit.Zero];
+        firstArgument = [Digit.Zero];
+        secondArgument = [Digit.Zero];
         currentOperator = Operator.None;
     }
     //IF a number is pressed
@@ -73,56 +73,56 @@ window.addEventListener('click', function (event) {
         //IF writing first value            
         if (currentOperator == Operator.None) {
             //Prevent Leading Zeroes
+            //TURN LINES 94 TO 104 INTO A REUSABLE FUNCTION
             //prevent more than one decimal
-            if (targetValue == Digit.Decimal && currentInputs.includes(Digit.Decimal)) {
+            if (targetValue == Digit.Decimal && firstArgument.includes(Digit.Decimal)) {
                 return;
             }
-            if (digitValues.includes(digitValue) && currentInputs.length < 9) {
-                if (currentInputs.length === 1 && currentInputs[0] === Digit.Zero && digitValue != Digit.Zero) {
-                    currentInputs[0] = digitValue;
+            if (digitValues.includes(digitValue) && firstArgument.length < 9) {
+                if (firstArgument.length === 1 && firstArgument[0] === Digit.Zero && digitValue != Digit.Zero) {
+                    firstArgument[0] = digitValue;
                 }
                 else {
-                    currentInputs.push(digitValue);
+                    firstArgument.push(digitValue);
                 }
             }
+            windowDOM.innerHTML = firstArgument.join("");
         }
         //IF an operator has been selected
+        if (currentOperator !== "none") {
+            //TURN LINES 112 TO 123 INTO A REUSABLE FUNCTION
+            if (targetValue == Digit.Decimal && secondArgument.includes(Digit.Decimal)) {
+                return;
+            }
+            if (digitValues.includes(digitValue) && secondArgument.length < 9) {
+                if (secondArgument.length === 1 && secondArgument[0] === Digit.Zero && digitValue != Digit.Zero) {
+                    secondArgument[0] = digitValue;
+                }
+                else {
+                    secondArgument.push(digitValue);
+                }
+            }
+            windowDOM.innerHTML = secondArgument.join("");
+        }
+    }
+    //IF operator selected
+    if (targetElement.matches('.operator')) {
+        console.log("you clicked an operator");
+        const operatorValue = targetValue;
+        //IF FIRST TIME USING OPERATOR
+        if (currentOperator === Operator.None) {
+            currentOperator = operatorValue; //define operation
+        }
+        //IF NOT FIRST TIME USING OPERATOR
         // if(currentOperator !== "none"){
-        //     //IF first digit of new value, save initial value, then display new value
-        //     if(previousInputs == 0 && typeof currentInputs == "string" && currentInputs != "Error"){
-        //         previousInputs = parseInt(currentInputs);
-        //         currentInputs = targetValue.toString();
-        //     }
-        //     //ELSE concat digit to new value
-        //     if(typeof currentInputs === "string" && currentInputs != "Error"){
-        //         currentInputs = currentInputs.concat(targetValue.toString());
-        //     }
+        //     solveIt(currentOperator) //execute previous operator
+        //     currentOperator = operatorValue //queue operator for next calculation
         // }
     }
-    // //IF the decimal is pressed
-    // if(targetElement.matches('#decimal')){
-    //     //prevent additional decimals
-    //     if(typeof currentInputs == "string" && !currentInputs.includes(".")){
-    //         currentInputs = currentInputs.concat(targetValue.toString());
-    //     }
-    // }
-    // //IF operator selected
-    // if(targetElement.matches('.operator')){
-    //     //IF FIRST TIME USING OPERATOR
-    //     if(currentOperator === "none"){
-    //         currentOperator = targetValue //define operation
-    //         return event.preventDefault() //prevent next step due to defined operation
-    //     }
-    //     //IF NOT FIRST TIME USING OPERATOR
-    //     if(currentOperator !== "none"){
-    //         solveIt(currentOperator) //execute previous operator
-    //         currentOperator = targetValue //queue operator for next calculation
-    //     }
-    // }
     // //IF solve button pressed 
     // if(targetElement.matches('#equals')){
     //     solveIt(currentOperator);
     // }
     // event.preventDefault() //prevent window from reloading on button press
-    windowDOM.innerHTML = currentInputs.join(""); //write to DOM value/calculation
+    //write to DOM value/calculation
 });
