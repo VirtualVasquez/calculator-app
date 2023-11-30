@@ -35,22 +35,22 @@ function solveIt(operator: string){
     let secondNumber = parseInt(secondArgument.join(""));
     
         if (operator === Operator.Divide){
-            solution = secondNumber / firstNumber;
+            solution = firstNumber / secondNumber
         }
         if (operator === Operator.Multiply){
-            solution = secondNumber * firstNumber
+            solution = firstNumber * secondNumber
         }
         if (operator === Operator.Subtract){
-            solution = secondNumber - firstNumber
+            solution = firstNumber - secondNumber
         }
         if (operator === Operator.Add){
-            solution = secondNumber + firstNumber
+            solution = firstNumber + secondNumber
         }
         if(solution){
             //display decimals to the thousandth(0.001)
             solution = Math.round(solution * 1000) / 1000
             //if number too big or too small to display, show ERROR
-            if(solution > 9999999999 || solution < 0.00000001){
+            if(solution.toString().length > 9){
                 errorState=true;
                 windowDOM.innerHTML = "ERROR";
             }
@@ -58,10 +58,6 @@ function solveIt(operator: string){
                 windowDOM.innerHTML = solution.toString();
             }
         }
-
-        //reset values to proceed with more calculations
-        // currentOperator="none";
-
 }
 
 function updateArgument(
@@ -110,7 +106,12 @@ window.addEventListener('click', function(event){
         firstArgument = [Digit.Zero];
         secondArgument  = [Digit.Zero];
         currentOperator = Operator.None;
+        errorState = false;
         windowDOM.innerHTML = firstArgument.join("");
+    }
+
+    if(errorState){
+        return;
     }
 
     //IF a number is pressed
@@ -127,20 +128,11 @@ window.addEventListener('click', function(event){
     //IF operator selected
     if(targetElement.matches('.operator')){
         const operatorValue = targetValue as Operator;
-        //IF FIRST TIME USING OPERATOR
-        if(currentOperator === Operator.None){
-            currentOperator = operatorValue //define operation
-        }
-        //IF NOT FIRST TIME USING OPERATOR
-        // if(currentOperator !== "none"){
-        //     solveIt(currentOperator) //execute previous operator
-        //     currentOperator = operatorValue //queue operator for next calculation
-        // }
 
+        currentOperator = operatorValue //define operation
     }
     //IF solve button pressed 
     if(targetElement.matches('#equals')){
-        console.log(currentOperator);
         solveIt(currentOperator);
     }
 })
