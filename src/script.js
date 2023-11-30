@@ -1,5 +1,4 @@
 "use strict";
-const windowDOM = document.getElementById('window');
 var Digit;
 (function (Digit) {
     Digit["Zero"] = "0";
@@ -25,6 +24,7 @@ var Operator;
 let firstArgument = [Digit.Zero];
 let secondArgument = [Digit.Zero];
 let currentOperator = Operator.None;
+const windowDOM = document.getElementById('window');
 windowDOM.innerHTML = firstArgument.join("");
 // //Helper Function
 // function solveIt(operator: string){
@@ -92,11 +92,9 @@ window.addEventListener('click', function (event) {
     //IF a number is pressed
     if (targetElement.matches('.number')) {
         const digitValue = targetValue;
-        // IF writing first value
         if (currentOperator === Operator.None) {
             updateArgument(firstArgument, digitValue, windowDOM);
         }
-        // IF an operator has been selected
         if (currentOperator !== Operator.None) {
             updateArgument(secondArgument, digitValue, windowDOM);
         }
@@ -119,6 +117,4 @@ window.addEventListener('click', function (event) {
     // if(targetElement.matches('#equals')){
     //     solveIt(currentOperator);
     // }
-    // event.preventDefault() //prevent window from reloading on button press
-    //write to DOM value/calculation
 });

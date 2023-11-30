@@ -1,5 +1,3 @@
-const windowDOM = document.getElementById('window') as HTMLElement;
-
 enum Digit {
     Zero = '0',
     One = '1',
@@ -13,7 +11,6 @@ enum Digit {
     Nine = '9',
     Decimal = '.',
 }
-
 enum Operator{
     Add = 'add',
     Subtract = 'subtract',
@@ -23,10 +20,10 @@ enum Operator{
 }
 
 type DigitTuple = [Digit, ...Digit[]] & { length: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 };
-
 let firstArgument: DigitTuple = [Digit.Zero]; 
 let secondArgument: DigitTuple = [Digit.Zero]; 
 let currentOperator =  Operator.None;
+const windowDOM = document.getElementById('window') as HTMLElement;
 
 windowDOM.innerHTML = firstArgument.join("");
 
@@ -111,18 +108,13 @@ window.addEventListener('click', function(event){
 
     //IF a number is pressed
     if(targetElement.matches('.number')){
-
         const digitValue = targetValue as Digit;
-
-        // IF writing first value
         if (currentOperator === Operator.None) {
             updateArgument(firstArgument, digitValue, windowDOM);
         }
-        // IF an operator has been selected
         if (currentOperator !== Operator.None) {
             updateArgument(secondArgument, digitValue, windowDOM);
         }
-
     }
 
     //IF operator selected
@@ -146,12 +138,6 @@ window.addEventListener('click', function(event){
     // if(targetElement.matches('#equals')){
     //     solveIt(currentOperator);
     // }
-
-
-
-    // event.preventDefault() //prevent window from reloading on button press
-    //write to DOM value/calculation
-
 })
 
 
