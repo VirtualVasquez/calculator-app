@@ -23,35 +23,41 @@ var Operator;
 })(Operator || (Operator = {}));
 let firstArgument = [Digit.Zero];
 let secondArgument = [Digit.Zero];
+let solution;
+let errorState = false;
 let currentOperator = Operator.None;
 const windowDOM = document.getElementById('window');
 windowDOM.innerHTML = firstArgument.join("");
-// //Helper Function
-// function solveIt(operator: string){
-//     if(typeof firstArgument === "number"){
-//         if (operator === "divide"){
-//             firstArgument = secondArgument / firstArgument;
-//         }
-//         if (operator === "multiply"){
-//             firstArgument = secondArgument * firstArgument
-//         }
-//         if (operator === "subtract"){
-//             firstArgument = secondArgument - firstArgument
-//         }
-//         if (operator === "add"){
-//             firstArgument = secondArgument + firstArgument
-//         }
-//         //display decimals to the thousandth(0.001)
-//         firstArgument = Math.round(firstArgument * 1000) / 1000
-//         //if number too big or too small to display, show ERROR
-//         if(firstArgument > 9999999999 || firstArgument < 0.00000001){
-//             firstArgument="ERROR";
-//         }
-//         //reset values to proceed with more calculations
-//         currentOperator="none";
-//         secondArgument=0;
-//     }
-// }
+function solveIt(operator) {
+    let firstNumber = parseInt(firstArgument.join(""));
+    let secondNumber = parseInt(secondArgument.join(""));
+    if (operator === Operator.Divide) {
+        solution = secondNumber / firstNumber;
+    }
+    if (operator === Operator.Multiply) {
+        solution = secondNumber * firstNumber;
+    }
+    if (operator === Operator.Subtract) {
+        solution = secondNumber - firstNumber;
+    }
+    if (operator === Operator.Add) {
+        solution = secondNumber + firstNumber;
+    }
+    if (solution) {
+        //display decimals to the thousandth(0.001)
+        solution = Math.round(solution * 1000) / 1000;
+        //if number too big or too small to display, show ERROR
+        if (solution > 9999999999 || solution < 0.00000001) {
+            errorState = true;
+            windowDOM.innerHTML = "ERROR";
+        }
+        else {
+            windowDOM.innerHTML = solution.toString();
+        }
+    }
+    //reset values to proceed with more calculations
+    // currentOperator="none";
+}
 function updateArgument(argument, targetValue, windowDOM) {
     const digitValues = Object.values(Digit);
     if (targetValue == Digit.Decimal && argument.includes(Digit.Decimal)) {
@@ -65,7 +71,6 @@ function updateArgument(argument, targetValue, windowDOM) {
             && argument[0] === Digit.Zero
             && targetValue !== Digit.Zero
             && targetValue !== Digit.Decimal) {
-            console.log(targetValue);
             argument[0] = targetValue;
         }
         else {
@@ -101,7 +106,6 @@ window.addEventListener('click', function (event) {
     }
     //IF operator selected
     if (targetElement.matches('.operator')) {
-        console.log("you clicked an operator");
         const operatorValue = targetValue;
         //IF FIRST TIME USING OPERATOR
         if (currentOperator === Operator.None) {
@@ -113,8 +117,9 @@ window.addEventListener('click', function (event) {
         //     currentOperator = operatorValue //queue operator for next calculation
         // }
     }
-    // //IF solve button pressed 
-    // if(targetElement.matches('#equals')){
-    //     solveIt(currentOperator);
-    // }
+    //IF solve button pressed 
+    if (targetElement.matches('#equals')) {
+        console.log(currentOperator);
+        solveIt(currentOperator);
+    }
 });
