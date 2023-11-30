@@ -52,6 +52,28 @@ windowDOM.innerHTML = firstArgument.join("");
 //         secondArgument=0;
 //     }
 // }
+function updateArgument(argument, targetValue, windowDOM) {
+    const digitValues = Object.values(Digit);
+    if (targetValue == Digit.Decimal && argument.includes(Digit.Decimal)) {
+        return;
+    }
+    if (argument.length === 1 && argument[0] === '0' && targetValue == Digit.Zero) {
+        return;
+    }
+    if (digitValues.includes(targetValue) && argument.length < 9) {
+        if (argument.length === 1
+            && argument[0] === Digit.Zero
+            && targetValue !== Digit.Zero
+            && targetValue !== Digit.Decimal) {
+            console.log(targetValue);
+            argument[0] = targetValue;
+        }
+        else {
+            argument.push(targetValue);
+        }
+    }
+    windowDOM.innerHTML = argument.join('');
+}
 window.addEventListener('click', function (event) {
     event.preventDefault(); //prevent window from reloading on button press
     //using type assertion to inform `event.target` as `Element` to then use appropriate methods.
@@ -65,44 +87,18 @@ window.addEventListener('click', function (event) {
         firstArgument = [Digit.Zero];
         secondArgument = [Digit.Zero];
         currentOperator = Operator.None;
+        windowDOM.innerHTML = firstArgument.join("");
     }
     //IF a number is pressed
     if (targetElement.matches('.number')) {
-        const digitValues = Object.values(Digit);
         const digitValue = targetValue;
-        //IF writing first value            
-        if (currentOperator == Operator.None) {
-            //Prevent Leading Zeroes
-            //TURN LINES 94 TO 104 INTO A REUSABLE FUNCTION
-            //prevent more than one decimal
-            if (targetValue == Digit.Decimal && firstArgument.includes(Digit.Decimal)) {
-                return;
-            }
-            if (digitValues.includes(digitValue) && firstArgument.length < 9) {
-                if (firstArgument.length === 1 && firstArgument[0] === Digit.Zero && digitValue != Digit.Zero) {
-                    firstArgument[0] = digitValue;
-                }
-                else {
-                    firstArgument.push(digitValue);
-                }
-            }
-            windowDOM.innerHTML = firstArgument.join("");
+        // IF writing first value
+        if (currentOperator === Operator.None) {
+            updateArgument(firstArgument, digitValue, windowDOM);
         }
-        //IF an operator has been selected
-        if (currentOperator !== "none") {
-            //TURN LINES 112 TO 123 INTO A REUSABLE FUNCTION
-            if (targetValue == Digit.Decimal && secondArgument.includes(Digit.Decimal)) {
-                return;
-            }
-            if (digitValues.includes(digitValue) && secondArgument.length < 9) {
-                if (secondArgument.length === 1 && secondArgument[0] === Digit.Zero && digitValue != Digit.Zero) {
-                    secondArgument[0] = digitValue;
-                }
-                else {
-                    secondArgument.push(digitValue);
-                }
-            }
-            windowDOM.innerHTML = secondArgument.join("");
+        // IF an operator has been selected
+        if (currentOperator !== Operator.None) {
+            updateArgument(secondArgument, digitValue, windowDOM);
         }
     }
     //IF operator selected
