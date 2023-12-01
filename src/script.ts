@@ -19,20 +19,19 @@ enum Operator{
     None = 'none'
 }
 
-type DigitTuple = [Digit, ...Digit[]] & { length: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 };
-let firstArgument: DigitTuple = [Digit.Zero]; 
-let secondArgument: DigitTuple = [Digit.Zero];
+let firstArgument: string = Digit.Zero;
+let secondArgument: string = Digit.Zero;
 let solution: null | number;
 let errorState = false; 
 let currentOperator =  Operator.None;
 const windowDOM = document.getElementById('window') as HTMLElement;
 
-windowDOM.innerHTML = firstArgument.join("");
+windowDOM.innerHTML = firstArgument;
 
 function solveIt(operator: string){
 
-    let firstNumber = parseInt(firstArgument.join(""));
-    let secondNumber = parseInt(secondArgument.join(""));
+    let firstNumber = parseInt(firstArgument);
+    let secondNumber = parseInt(secondArgument);
     
         if (operator === Operator.Divide){
             solution = firstNumber / secondNumber
@@ -61,32 +60,31 @@ function solveIt(operator: string){
 }
 
 function updateArgument(
-    argument: Digit[],
+    argument: string,
     targetValue: Digit,
-    windowDOM: HTMLElement
 ) {
-    const digitValues = Object.values(Digit) as Digit[];
+    const digitValues = Object.values(Digit) as string[];
+    console.log(digitValues);
 
     if(targetValue == Digit.Decimal && argument.includes(Digit.Decimal)){
-        return;
+        return argument;
     }
-    if(argument.length === 1 && argument[0] === '0' && targetValue == Digit.Zero){
-        return;
+    if(argument === '0' && targetValue == Digit.Zero){
+        return argument;
     }
 
     if (digitValues.includes(targetValue) && argument.length < 9) {
-        if (argument.length === 1 
-            && argument[0] === Digit.Zero 
-            && targetValue !== Digit.Zero 
-            && targetValue !== Digit.Decimal) 
+        if (argument === Digit.Zero) 
         {
-            argument[0] = targetValue;
+            console.log("update argument as: " + targetValue);
+            return targetValue;
         } else {
-            argument.push(targetValue);
+            console.log("update argument as: " + (argument + targetValue));
+            return argument + targetValue;
         }
     }
 
-    windowDOM.innerHTML = argument.join('');
+    return argument;
 }
 
 window.addEventListener('click', function(event){
@@ -103,11 +101,11 @@ window.addEventListener('click', function(event){
     
     //IF reset button pressed
     if(targetValue === "clear"){
-        firstArgument = [Digit.Zero];
-        secondArgument  = [Digit.Zero];
+        firstArgument = Digit.Zero;
+        secondArgument  = Digit.Zero;
         currentOperator = Operator.None;
         errorState = false;
-        windowDOM.innerHTML = firstArgument.join("");
+        windowDOM.innerHTML = firstArgument;
     }
 
     if(errorState){
@@ -118,10 +116,12 @@ window.addEventListener('click', function(event){
     if(targetElement.matches('.number')){
         const digitValue = targetValue as Digit;
         if (currentOperator === Operator.None) {
-            updateArgument(firstArgument, digitValue, windowDOM);
+            firstArgument = updateArgument(firstArgument, digitValue);
+            windowDOM.innerHTML = firstArgument;
         }
         if (currentOperator !== Operator.None) {
-            updateArgument(secondArgument, digitValue, windowDOM);
+            secondArgument = updateArgument(secondArgument, digitValue);
+            windowDOM.innerHTML = secondArgument;
         }
     }
 

@@ -21,16 +21,16 @@ var Operator;
     Operator["Divide"] = "divide";
     Operator["None"] = "none";
 })(Operator || (Operator = {}));
-let firstArgument = [Digit.Zero];
-let secondArgument = [Digit.Zero];
+let firstArgument = Digit.Zero;
+let secondArgument = Digit.Zero;
 let solution;
 let errorState = false;
 let currentOperator = Operator.None;
 const windowDOM = document.getElementById('window');
-windowDOM.innerHTML = firstArgument.join("");
+windowDOM.innerHTML = firstArgument;
 function solveIt(operator) {
-    let firstNumber = parseInt(firstArgument.join(""));
-    let secondNumber = parseInt(secondArgument.join(""));
+    let firstNumber = parseInt(firstArgument);
+    let secondNumber = parseInt(secondArgument);
     if (operator === Operator.Divide) {
         solution = firstNumber / secondNumber;
     }
@@ -56,26 +56,26 @@ function solveIt(operator) {
         }
     }
 }
-function updateArgument(argument, targetValue, windowDOM) {
+function updateArgument(argument, targetValue) {
     const digitValues = Object.values(Digit);
+    console.log(digitValues);
     if (targetValue == Digit.Decimal && argument.includes(Digit.Decimal)) {
-        return;
+        return argument;
     }
-    if (argument.length === 1 && argument[0] === '0' && targetValue == Digit.Zero) {
-        return;
+    if (argument === '0' && targetValue == Digit.Zero) {
+        return argument;
     }
     if (digitValues.includes(targetValue) && argument.length < 9) {
-        if (argument.length === 1
-            && argument[0] === Digit.Zero
-            && targetValue !== Digit.Zero
-            && targetValue !== Digit.Decimal) {
-            argument[0] = targetValue;
+        if (argument === Digit.Zero) {
+            console.log("update argument as: " + targetValue);
+            return targetValue;
         }
         else {
-            argument.push(targetValue);
+            console.log("update argument as: " + (argument + targetValue));
+            return argument + targetValue;
         }
     }
-    windowDOM.innerHTML = argument.join('');
+    return argument;
 }
 window.addEventListener('click', function (event) {
     event.preventDefault(); //prevent window from reloading on button press
@@ -87,11 +87,11 @@ window.addEventListener('click', function (event) {
     }
     //IF reset button pressed
     if (targetValue === "clear") {
-        firstArgument = [Digit.Zero];
-        secondArgument = [Digit.Zero];
+        firstArgument = Digit.Zero;
+        secondArgument = Digit.Zero;
         currentOperator = Operator.None;
         errorState = false;
-        windowDOM.innerHTML = firstArgument.join("");
+        windowDOM.innerHTML = firstArgument;
     }
     if (errorState) {
         return;
@@ -100,10 +100,12 @@ window.addEventListener('click', function (event) {
     if (targetElement.matches('.number')) {
         const digitValue = targetValue;
         if (currentOperator === Operator.None) {
-            updateArgument(firstArgument, digitValue, windowDOM);
+            firstArgument = updateArgument(firstArgument, digitValue);
+            windowDOM.innerHTML = firstArgument;
         }
         if (currentOperator !== Operator.None) {
-            updateArgument(secondArgument, digitValue, windowDOM);
+            secondArgument = updateArgument(secondArgument, digitValue);
+            windowDOM.innerHTML = secondArgument;
         }
     }
     //IF operator selected
