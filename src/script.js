@@ -21,38 +21,40 @@ var Operator;
     Operator["Divide"] = "divide";
     Operator["None"] = "none";
 })(Operator || (Operator = {}));
-let firstArgument = Digit.Zero;
-let secondArgument = Digit.Zero;
-let solution;
-let errorState = false;
-let currentOperator = Operator.None;
+let calculation = {
+    firstArgument: Digit.Zero,
+    secondArgument: Digit.Zero,
+    solution: null,
+    errorState: false,
+    currentOperator: Operator.None
+};
 const windowDOM = document.getElementById('window');
-windowDOM.innerHTML = firstArgument;
+windowDOM.innerHTML = calculation.firstArgument;
 function solveIt(operator) {
-    let firstNumber = parseInt(firstArgument);
-    let secondNumber = parseInt(secondArgument);
+    let firstNumber = parseInt(calculation.firstArgument);
+    let secondNumber = parseInt(calculation.secondArgument);
     if (operator === Operator.Divide) {
-        solution = firstNumber / secondNumber;
+        calculation.solution = firstNumber / secondNumber;
     }
     if (operator === Operator.Multiply) {
-        solution = firstNumber * secondNumber;
+        calculation.solution = firstNumber * secondNumber;
     }
     if (operator === Operator.Subtract) {
-        solution = firstNumber - secondNumber;
+        calculation.solution = firstNumber - secondNumber;
     }
     if (operator === Operator.Add) {
-        solution = firstNumber + secondNumber;
+        calculation.solution = firstNumber + secondNumber;
     }
-    if (solution) {
+    if (calculation.solution) {
         //display decimals to the thousandth(0.001)
-        solution = Math.round(solution * 1000) / 1000;
+        calculation.solution = Math.round(calculation.solution * 1000) / 1000;
         //if number too big or too small to display, show ERROR
-        if (solution.toString().length > 9) {
-            errorState = true;
+        if (calculation.solution.toString().length > 9) {
+            calculation.errorState = true;
             windowDOM.innerHTML = "ERROR";
         }
         else {
-            windowDOM.innerHTML = solution.toString();
+            windowDOM.innerHTML = calculation.solution.toString();
         }
     }
 }
@@ -75,10 +77,10 @@ function updateArgument(argument, targetValue) {
     return argument;
 }
 function updateCurrentOperator(operator) {
-    if (!currentOperator) {
+    if (!calculation.currentOperator) {
         return operator;
     }
-    if (!solution && secondArgument == Digit.Zero) {
+    if (!calculation.solution && calculation.secondArgument == Digit.Zero) {
         return operator;
     }
     return Operator.None;
@@ -93,42 +95,42 @@ window.addEventListener('click', function (event) {
     }
     //IF reset button pressed
     if (targetValue === "clear") {
-        firstArgument = Digit.Zero;
-        secondArgument = Digit.Zero;
-        currentOperator = Operator.None;
-        errorState = false;
-        windowDOM.innerHTML = firstArgument;
+        calculation.firstArgument = Digit.Zero;
+        calculation.secondArgument = Digit.Zero;
+        calculation.currentOperator = Operator.None;
+        calculation.errorState = false;
+        windowDOM.innerHTML = calculation.firstArgument;
     }
-    if (errorState) {
+    if (calculation.errorState) {
         return;
     }
     //IF a number is pressed
     if (targetElement.matches('.number')) {
         const digitValue = targetValue;
-        if (currentOperator === Operator.None) {
-            firstArgument = updateArgument(firstArgument, digitValue);
-            windowDOM.innerHTML = firstArgument;
+        if (calculation.currentOperator === Operator.None) {
+            calculation.firstArgument = updateArgument(calculation.firstArgument, digitValue);
+            windowDOM.innerHTML = calculation.firstArgument;
         }
-        if (currentOperator !== Operator.None) {
-            secondArgument = updateArgument(secondArgument, digitValue);
-            windowDOM.innerHTML = secondArgument;
+        if (calculation.currentOperator !== Operator.None) {
+            calculation.secondArgument = updateArgument(calculation.secondArgument, digitValue);
+            windowDOM.innerHTML = calculation.secondArgument;
         }
     }
     //IF operator selected
     if (targetElement.matches('.operator')) {
         const operatorValue = targetValue;
-        if (firstArgument != Digit.Zero && secondArgument != Digit.Zero) {
-            solveIt(currentOperator);
-            if (!errorState && solution) {
-                firstArgument = solution.toString();
-                secondArgument = Digit.Zero;
-                solution = null;
+        if (calculation.firstArgument != Digit.Zero && calculation.secondArgument != Digit.Zero) {
+            solveIt(calculation.currentOperator);
+            if (!calculation.errorState && calculation.solution) {
+                calculation.firstArgument = calculation.solution.toString();
+                calculation.secondArgument = Digit.Zero;
+                calculation.solution = null;
             }
         }
-        currentOperator = updateCurrentOperator(operatorValue);
+        calculation.currentOperator = updateCurrentOperator(operatorValue);
     }
     //IF solve button pressed 
     if (targetElement.matches('#equals')) {
-        solveIt(currentOperator);
+        solveIt(calculation.currentOperator);
     }
 });

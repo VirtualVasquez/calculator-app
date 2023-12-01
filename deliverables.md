@@ -5,7 +5,7 @@
 
 2. Interfaces and Type Declarations:
 
- - Define interfaces for complex object shapes used in the project.
+ - ~~Define interfaces for complex object shapes used in the project.~~
  - Create type aliases for commonly used types.
 
 3. Generics and Advanced Types:
@@ -32,12 +32,12 @@
 8. Refactoring JavaScript to TypeScript:
 
  - ~~Convert existing JavaScript files to TypeScript.~~
- - Resolve compilation errors during conversion.
+ - ~~Resolve compilation errors during conversion.~~
 
 9. Error Handling and Debugging:
 
 - ~~Handle type-related errors effectively.~~
-- Debug and troubleshoot TypeScript-specific issues.
+- ~~Debug and troubleshoot TypeScript-specific issues.~~
 
 10. IDE/Editor Integration:
 
