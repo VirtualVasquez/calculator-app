@@ -72,9 +72,10 @@ function solveIt(operator: string){
         }
 }
 
-function updateArgument(
-    argument: DigitTuple,
+function updateArgument<T extends DigitTuple>(
+    argument: T,
     targetValue: Digit,
+    maxLength: number = 9
 ) {
     const digitValues = Object.values(Digit) as DigitTuple[];
 
@@ -85,7 +86,7 @@ function updateArgument(
         return argument;
     }
 
-    if (digitValues.includes(targetValue) && argument.length < 9) {
+    if (digitValues.includes(targetValue) && argument.length < maxLength) {
         if (argument === Digit.Zero) 
         {
             return targetValue;

@@ -6,10 +6,10 @@
 2. Interfaces and Type Declarations:
 
  - ~~Define interfaces for complex object shapes used in the project.~~
- - Create type aliases for commonly used types.
+ - ~~Create type aliases for commonly used types.~~
 
 3. Generics and Advanced Types:
- - Implement generics for reusable components.
+ - ~~Implement generics for reusable components.~~
  - Explore and apply advanced TypeScript features (e.g., mapped types, conditional types) where applicable.
 
 4. Union and Intersection Types:

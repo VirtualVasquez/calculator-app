@@ -58,7 +58,7 @@ function solveIt(operator) {
         }
     }
 }
-function updateArgument(argument, targetValue) {
+function updateArgument(argument, targetValue, maxLength = 9) {
     const digitValues = Object.values(Digit);
     if (targetValue == Digit.Decimal && argument.includes(Digit.Decimal)) {
         return argument;
@@ -66,7 +66,7 @@ function updateArgument(argument, targetValue) {
     if (argument === '0' && targetValue == Digit.Zero) {
         return argument;
     }
-    if (digitValues.includes(targetValue) && argument.length < 9) {
+    if (digitValues.includes(targetValue) && argument.length < maxLength) {
         if (argument === Digit.Zero) {
             return targetValue;
         }
