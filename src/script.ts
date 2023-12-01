@@ -1,3 +1,5 @@
+type DigitTuple = string;
+
 enum Digit {
     Zero = '0',
     One = '1',
@@ -20,8 +22,8 @@ enum Operator{
 }
 
 interface Calculation { 
-    firstArgument: string;
-    secondArgument: string;
+    firstArgument: DigitTuple;
+    secondArgument: DigitTuple;
     solution: null | number;
     errorState: boolean;
     currentOperator: Operator;
@@ -71,10 +73,10 @@ function solveIt(operator: string){
 }
 
 function updateArgument(
-    argument: string,
+    argument: DigitTuple,
     targetValue: Digit,
 ) {
-    const digitValues = Object.values(Digit) as string[];
+    const digitValues = Object.values(Digit) as DigitTuple[];
 
     if(targetValue == Digit.Decimal && argument.includes(Digit.Decimal)){
         return argument;
