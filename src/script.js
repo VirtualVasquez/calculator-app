@@ -58,7 +58,6 @@ function solveIt(operator) {
 }
 function updateArgument(argument, targetValue) {
     const digitValues = Object.values(Digit);
-    console.log(digitValues);
     if (targetValue == Digit.Decimal && argument.includes(Digit.Decimal)) {
         return argument;
     }
@@ -67,15 +66,22 @@ function updateArgument(argument, targetValue) {
     }
     if (digitValues.includes(targetValue) && argument.length < 9) {
         if (argument === Digit.Zero) {
-            console.log("update argument as: " + targetValue);
             return targetValue;
         }
         else {
-            console.log("update argument as: " + (argument + targetValue));
             return argument + targetValue;
         }
     }
     return argument;
+}
+function updateCurrentOperator(operator) {
+    if (!currentOperator) {
+        return operator;
+    }
+    if (!solution && secondArgument == Digit.Zero) {
+        return operator;
+    }
+    return Operator.None;
 }
 window.addEventListener('click', function (event) {
     event.preventDefault(); //prevent window from reloading on button press
@@ -111,7 +117,15 @@ window.addEventListener('click', function (event) {
     //IF operator selected
     if (targetElement.matches('.operator')) {
         const operatorValue = targetValue;
-        currentOperator = operatorValue; //define operation
+        if (firstArgument != Digit.Zero && secondArgument != Digit.Zero) {
+            solveIt(currentOperator);
+            if (!errorState && solution) {
+                firstArgument = solution.toString();
+                secondArgument = Digit.Zero;
+                solution = null;
+            }
+        }
+        currentOperator = updateCurrentOperator(operatorValue);
     }
     //IF solve button pressed 
     if (targetElement.matches('#equals')) {

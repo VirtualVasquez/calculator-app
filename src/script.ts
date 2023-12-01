@@ -64,7 +64,6 @@ function updateArgument(
     targetValue: Digit,
 ) {
     const digitValues = Object.values(Digit) as string[];
-    console.log(digitValues);
 
     if(targetValue == Digit.Decimal && argument.includes(Digit.Decimal)){
         return argument;
@@ -76,15 +75,23 @@ function updateArgument(
     if (digitValues.includes(targetValue) && argument.length < 9) {
         if (argument === Digit.Zero) 
         {
-            console.log("update argument as: " + targetValue);
             return targetValue;
         } else {
-            console.log("update argument as: " + (argument + targetValue));
             return argument + targetValue;
         }
     }
 
     return argument;
+}
+
+function updateCurrentOperator(operator: Operator){
+    if(!currentOperator){
+        return operator
+    }
+    if(!solution && secondArgument == Digit.Zero){
+        return operator;
+    }
+    return Operator.None;     
 }
 
 window.addEventListener('click', function(event){
@@ -93,12 +100,10 @@ window.addEventListener('click', function(event){
 
     //using type assertion to inform `event.target` as `Element` to then use appropriate methods.
     const targetElement = event.target as Element;
-    const targetValue = targetElement.getAttribute('value');
-    
+    const targetValue = targetElement.getAttribute('value');    
     if (targetValue == null){
         return;
-    }
-    
+    }    
     //IF reset button pressed
     if(targetValue === "clear"){
         firstArgument = Digit.Zero;
@@ -107,11 +112,9 @@ window.addEventListener('click', function(event){
         errorState = false;
         windowDOM.innerHTML = firstArgument;
     }
-
     if(errorState){
         return;
     }
-
     //IF a number is pressed
     if(targetElement.matches('.number')){
         const digitValue = targetValue as Digit;
@@ -124,12 +127,19 @@ window.addEventListener('click', function(event){
             windowDOM.innerHTML = secondArgument;
         }
     }
-
     //IF operator selected
     if(targetElement.matches('.operator')){
         const operatorValue = targetValue as Operator;
 
-        currentOperator = operatorValue //define operation
+        if(firstArgument != Digit.Zero && secondArgument != Digit.Zero){
+            solveIt(currentOperator);
+            if(!errorState && solution){
+                firstArgument = solution.toString();
+                secondArgument = Digit.Zero;
+                solution = null;   
+            }
+        }
+        currentOperator = updateCurrentOperator(operatorValue);    
     }
     //IF solve button pressed 
     if(targetElement.matches('#equals')){
