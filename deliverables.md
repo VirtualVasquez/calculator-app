@@ -18,7 +18,7 @@
 
 5. Function Overloading and Signatures:
 
- - Handle different function call patterns by using function overloading and signatures.
+ - ~~Handle different function call patterns by using function overloading and signatures.~~
 
 6. Strict Mode and Compiler Options:
 

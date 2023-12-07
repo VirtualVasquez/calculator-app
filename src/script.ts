@@ -41,35 +41,47 @@ const windowDOM = document.getElementById('window') as HTMLElement;
 
 windowDOM.innerHTML = calculation.firstArgument;
 
+function performOperation(operator: string, a: number, b: number): number;
+function performOperation(operator: string, a: number, b: number): number;
+function performOperation(operator: string, a: number, b: number): number;
+function performOperation(operator: string, a: number, b: number): number;
+function performOperation(operator: string, a: number, b: number): number | undefined{
+    switch (operator) { 
+        case Operator.Add:
+            return a + b;
+        case Operator.Subtract:
+            return a - b;
+        case Operator.Multiply:
+            return a * b;
+        case Operator.Divide:
+            return b !== 0 ? a/b : undefined; //handle division by zero
+        default:
+            return undefined;
+    }
+}
+
+
+
+
 function solveIt(operator: string){
 
     let firstNumber = parseInt(calculation.firstArgument);
     let secondNumber = parseInt(calculation.secondArgument);
+
+    calculation.solution = performOperation(operator, firstNumber, secondNumber);
     
-        if (operator === Operator.Divide){
-            calculation.solution = firstNumber / secondNumber
+    if(calculation.solution){
+        //display decimals to the thousandth(0.001)
+        calculation.solution = Math.round(calculation.solution * 1000) / 1000
+        //if number too big or too small to display, show ERROR
+        if(calculation.solution.toString().length > 9){
+            calculation.errorState=true;
+            windowDOM.innerHTML = "ERROR";
         }
-        if (operator === Operator.Multiply){
-            calculation.solution = firstNumber * secondNumber
+        else{
+            windowDOM.innerHTML = calculation.solution.toString();
         }
-        if (operator === Operator.Subtract){
-            calculation.solution = firstNumber - secondNumber
-        }
-        if (operator === Operator.Add){
-            calculation.solution = firstNumber + secondNumber
-        }
-        if(calculation.solution){
-            //display decimals to the thousandth(0.001)
-            calculation.solution = Math.round(calculation.solution * 1000) / 1000
-            //if number too big or too small to display, show ERROR
-            if(calculation.solution.toString().length > 9){
-                calculation.errorState=true;
-                windowDOM.innerHTML = "ERROR";
-            }
-            else{
-                windowDOM.innerHTML = calculation.solution.toString();
-            }
-        }
+    }
 }
 
 function updateArgument<T extends DigitTuple>(
